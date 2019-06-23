@@ -18,9 +18,7 @@ public class ResultsActivity extends AppCompatActivity {
 
         initializeComponents();
         Intent intent = getIntent();
-        String textValue = intent.getStringExtra("TEXT_SEARCH");
-
-        editTextSearchResults.setText(textValue);
+        editTextSearchResults.setText(intent.getStringExtra("TEXT_SEARCH"));
     }
 
     private void initializeComponents() {
