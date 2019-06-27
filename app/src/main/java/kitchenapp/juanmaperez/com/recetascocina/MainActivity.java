@@ -54,21 +54,32 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("EXITO");
                 ResponseAPI responseAPI = response.body();
                 List<Hit> hits = responseAPI.getHits();
-                Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+                //Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
                 ArrayList<String> recipesTitles = new ArrayList<>();
+                ArrayList<String> recipesImages = new ArrayList<>();
                 //ArrayList<List<String>> ingredients = new ArrayList<>();
                 for(Hit hit : hits){
-                    System.out.println("AÑADIENDO: " + hit.getRecipe().getLabel());
+                    recipesImages.add(hit.getRecipe().getImage());
+                    //System.out.println("AÑADIENDO: " + hit.getRecipe().getLabel());
                     recipesTitles.add(hit.getRecipe().getLabel());
                     /**System.out.println("INGREDIENTES: ");
                     for(String s : hit.getRecipe().getIngredientLines()){
                         System.out.println(s);
                     }**/
                 }
-                intent.putStringArrayListExtra("ARRAY", recipesTitles);
-                //intent.putStringArrayListExtra("INGREDIENTS", recipes);
+
+                ArrayList<Hit> hitsToPass = new ArrayList<Hit>();
+                hitsToPass.addAll(hits);
+                Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("ARRAYLIST",(Serializable) hitsToPass);
+                intent.putExtra("BUNDLE", args);
                 intent.putExtra("TEXT_SEARCH", editTextSearch.getText().toString());
                 startActivity(intent);
+                //intent.putStringArrayListExtra("ARRAY", recipesTitles);
+                //intent.putStringArrayListExtra("INGREDIENTS", recipes);
+
+                //startActivity(intent);
             }
 
             @Override

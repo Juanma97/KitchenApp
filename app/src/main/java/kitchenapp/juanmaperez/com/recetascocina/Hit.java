@@ -3,7 +3,9 @@ package kitchenapp.juanmaperez.com.recetascocina;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Hit {
+import java.io.Serializable;
+
+public class Hit implements Serializable {
 
     @SerializedName("recipe")
     @Expose

@@ -20,6 +20,7 @@ public class ResultsActivity extends AppCompatActivity {
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<String> recipesTitles;
+    ArrayList<Hit> hits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +29,16 @@ public class ResultsActivity extends AppCompatActivity {
 
         System.out.println("ON CREATE RESULTS ACTIVITY");
         Intent intent = getIntent();
-        recipesTitles = intent.getStringArrayListExtra("ARRAY");
+        Bundle args = intent.getBundleExtra("BUNDLE");
+        hits = (ArrayList<Hit>) args.getSerializable("ARRAYLIST");
+        //recipesTitles = intent.getStringArrayListExtra("ARRAY");
         //ArrayList<String> ingredients = intent.getStringArrayListExtra("INGREDIENTS");
         System.out.println("HAN LLEGADO LOS HITS");
-        System.out.println(recipesTitles.size());
-        for(String s : recipesTitles) {
-            System.out.println(s);
+        System.out.println(hits.size());
+//        System.out.println(recipesTitles.size());
+        for(Hit hit : hits) {
+            //recipesTitles.add(hit.getRecipe().getLabel());
+            System.out.println(hit.getRecipe().getLabel());
         }
         initializeComponents();
         editTextSearchResults.setText(intent.getStringExtra("TEXT_SEARCH"));
@@ -49,7 +54,7 @@ public class ResultsActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(layoutManager);
 
-        mAdapter = new RecipeAdapter(this, recipesTitles);
+        mAdapter = new RecipeAdapter(this, hits);
         recyclerView.setAdapter(mAdapter);
     }
 }

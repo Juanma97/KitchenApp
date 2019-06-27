@@ -1,10 +1,11 @@
 package kitchenapp.juanmaperez.com.recetascocina;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Recipe {
+public class Recipe implements Serializable {
 
     @SerializedName("uri")
     @Expose

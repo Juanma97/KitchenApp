@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHolder> {
 
-    private ArrayList<String> dataset;
+    private ArrayList<Hit> dataset;
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -27,7 +29,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     }
 
-    public RecipeAdapter(Context mContext, ArrayList<String> dataset){
+    public RecipeAdapter(Context mContext, ArrayList<Hit> dataset){
         this.mContext = mContext;
         this.dataset = dataset;
     }
@@ -42,12 +44,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        String recipe = dataset.get(position);
-        holder.titleRecipe.setText(recipe);
-        //holder.count.setText(album.getNumOfSongs() + " songs");
+        Hit hit = dataset.get(position);
+        holder.titleRecipe.setText(hit.getRecipe().getLabel());
+        //holder.imageRecipe.setImageURI(hit.getRecipe().getImage());
 
         // loading album cover using Glide library
-        //Glide.with(mContext).load(album.getThumbnail()).into(holder.thumbnail);
+        Glide.with(mContext).load(hit.getRecipe().getImage()).into(holder.imageRecipe);
 
         /**holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
