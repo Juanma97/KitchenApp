@@ -18,12 +18,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView titleRecipe;
+        public TextView titleRecipe, caloriesRecipe;
         public ImageView imageRecipe;
 
         public MyViewHolder(View view){
             super(view);
             titleRecipe = view.findViewById(R.id.titleRecipe);
+            caloriesRecipe = view.findViewById(R.id.caloriesRecipe);
             imageRecipe = view.findViewById(R.id.imageRecipe);
         }
 
@@ -46,20 +47,9 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Hit hit = dataset.get(position);
         holder.titleRecipe.setText(hit.getRecipe().getLabel());
-        //holder.imageRecipe.setImageURI(hit.getRecipe().getImage());
-
-        // loading album cover using Glide library
+        holder.caloriesRecipe.setText(hit.getRecipe().getCalories().toString() + " KCAL");
         Glide.with(mContext).load(hit.getRecipe().getImage()).into(holder.imageRecipe);
-
-        /**holder.overflow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupMenu(holder.overflow);
-            }
-        });**/
     }
-
-
 
     @Override
     public int getItemCount() {

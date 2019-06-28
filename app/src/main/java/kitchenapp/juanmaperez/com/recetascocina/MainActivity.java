@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<ResponseAPI>() {
             @Override
             public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
+                if(response.code() != 200){
+                    response.raw().body().close();
+                }
                 System.out.println("EXITO");
                 ResponseAPI responseAPI = response.body();
                 List<Hit> hits = responseAPI.getHits();

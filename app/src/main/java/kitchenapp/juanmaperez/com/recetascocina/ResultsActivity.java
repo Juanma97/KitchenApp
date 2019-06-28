@@ -1,26 +1,36 @@
 package kitchenapp.juanmaperez.com.recetascocina;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
+import java.io.Serializable;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class ResultsActivity extends AppCompatActivity {
 
     EditText editTextSearchResults;
-    Button buttonSearchResults;
+    ImageButton buttonSearchResults;
     RecyclerView recyclerView;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager layoutManager;
-    ArrayList<String> recipesTitles;
     ArrayList<Hit> hits;
+    //private Context mContext = this.getApplicationContext();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +41,9 @@ public class ResultsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
         hits = (ArrayList<Hit>) args.getSerializable("ARRAYLIST");
-        //recipesTitles = intent.getStringArrayListExtra("ARRAY");
-        //ArrayList<String> ingredients = intent.getStringArrayListExtra("INGREDIENTS");
         System.out.println("HAN LLEGADO LOS HITS");
         System.out.println(hits.size());
-//        System.out.println(recipesTitles.size());
         for(Hit hit : hits) {
-            //recipesTitles.add(hit.getRecipe().getLabel());
             System.out.println(hit.getRecipe().getLabel());
         }
         initializeComponents();
@@ -48,6 +54,12 @@ public class ResultsActivity extends AppCompatActivity {
         System.out.println("INITIALIZE COMPONENTS");
         editTextSearchResults = findViewById(R.id.editTextSearchResults);
         buttonSearchResults = findViewById(R.id.buttonSearchResults);
+        buttonSearchResults.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getRecipes(editTextSearchResults.getText().toString());
+            }
+        });
         recyclerView = findViewById(R.id.recyclerView);
 
         layoutManager = new LinearLayoutManager(this);
@@ -56,5 +68,43 @@ public class ResultsActivity extends AppCompatActivity {
 
         mAdapter = new RecipeAdapter(this, hits);
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private void getRecipes(String query) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://test-es.edamam.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        RecipeService recipeService = retrofit.create(RecipeService.class);
+        Call<ResponseAPI> call = recipeService.getRecipe(query, Credentials.APP_ID, Credentials.API_KEY);
+
+        call.enqueue(new Callback<ResponseAPI>() {
+            @Override
+            public void onResponse(Call<ResponseAPI> call, Response<ResponseAPI> response) {
+                if(response.code() != 200){
+                    response.raw().body().close();
+                }
+                System.out.println("EXITO");
+                ResponseAPI responseAPI = response.body();
+                List<Hit> hitsResponse = responseAPI.getHits();
+                hits.clear();
+                hits.addAll(hitsResponse);
+                System.out.println(hits.size());
+                for(Hit h : hits){
+                    System.out.println(h.getRecipe().getLabel());
+                }
+                mAdapter = new RecipeAdapter(getApplicationContext(), hits);
+                recyclerView.setAdapter(mAdapter);
+
+                mAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAPI> call, Throwable t) {
+                System.out.println("HA FALLADO: " + t.getMessage());
+            }
+        });
     }
 }
