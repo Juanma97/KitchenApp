@@ -2,6 +2,7 @@ package kitchenapp.juanmaperez.com.recetascocina;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_details);
 
         toolbar = findViewById(R.id.MyToolbar);
+
         bgHeader = findViewById(R.id.bgheader);
         titleRecipe = findViewById(R.id.titleRecipeDetails);
         timeRecipe = findViewById(R.id.timeRecipe);
@@ -52,8 +54,31 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapse_toolbar);
+        final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapse_toolbar);
         collapsingToolbarLayout.setTitle(" ");
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.MyAppbar);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle(hit.getRecipe().getLabel());
+                    //titleRecipe.setVisibility(View.INVISIBLE);
+                    titleRecipe.setText("Datos e ingredientes");
+                    isShow = true;
+                } else if(isShow) {
+                    collapsingToolbarLayout.setTitle(" ");//careful there should a space between double quote otherwise it wont work
+                    //titleRecipe.setVisibility(View.VISIBLE);
+                    titleRecipe.setText(hit.getRecipe().getLabel());
+                    isShow = false;
+                }
+            }
+        });
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
@@ -75,5 +100,5 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         ingredientsRecipe.setText(ingredients);
 
     }
-
+    
 }
