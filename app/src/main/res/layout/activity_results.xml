@@ -21,18 +21,26 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+        <ImageButton
+            android:id="@+id/buttonBackResults"
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:src="?attr/homeAsUpIndicator"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_weight="0.2"/>
+
         <EditText
             android:id="@+id/editTextSearchResults"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_weight="1.8" />
+            android:layout_weight="1.6" />
 
         <ImageButton
             android:id="@+id/buttonSearchResults"
             android:background="@android:drawable/ic_menu_search"
             android:backgroundTint="@color/colorPrimary"
             android:layout_width="0px"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.2" />
 
     </LinearLayout>

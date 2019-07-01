@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Recetas Cocina</string>
-    <string name="searchHint">Search ...</string>
-    <string name="title_search">What do you want eat today?</string>
-    <string name="search_button">Search</string>
+    <string name="searchHint">Ingrediente</string>
+    <string name="title_search">¿Qué quieres comer hoy?</string>
+    <string name="search_button">Buscar</string>
 </resources>

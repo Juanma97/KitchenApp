@@ -25,12 +25,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ResultsActivity extends AppCompatActivity {
 
     EditText editTextSearchResults;
-    ImageButton buttonSearchResults;
+    ImageButton buttonSearchResults, buttonBackResults;
     RecyclerView recyclerView;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<Hit> hits;
-    //private Context mContext = this.getApplicationContext();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,19 +40,21 @@ public class ResultsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
         hits = (ArrayList<Hit>) args.getSerializable("ARRAYLIST");
-        System.out.println("HAN LLEGADO LOS HITS");
-        System.out.println(hits.size());
-        for(Hit hit : hits) {
-            System.out.println(hit.getRecipe().getLabel());
-        }
         initializeComponents();
         editTextSearchResults.setText(intent.getStringExtra("TEXT_SEARCH"));
     }
 
     private void initializeComponents() {
-        System.out.println("INITIALIZE COMPONENTS");
         editTextSearchResults = findViewById(R.id.editTextSearchResults);
         buttonSearchResults = findViewById(R.id.buttonSearchResults);
+        buttonBackResults = findViewById(R.id.buttonBackResults);
+        buttonBackResults.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ResultsActivity.this, MainActivity.class));
+                finish();
+            }
+        });
         buttonSearchResults.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,7 +78,7 @@ public class ResultsActivity extends AppCompatActivity {
                 .build();
 
         RecipeService recipeService = retrofit.create(RecipeService.class);
-        Call<ResponseAPI> call = recipeService.getRecipe(query, Credentials.APP_ID, Credentials.API_KEY);
+        Call<ResponseAPI> call = recipeService.getRecipe(query, Credentials.APP_ID, Credentials.API_KEY, 100);
 
         call.enqueue(new Callback<ResponseAPI>() {
             @Override
@@ -95,6 +96,7 @@ public class ResultsActivity extends AppCompatActivity {
                     System.out.println(h.getRecipe().getLabel());
                 }
                 mAdapter = new RecipeAdapter(getApplicationContext(), hits);
+
                 recyclerView.setAdapter(mAdapter);
 
                 mAdapter.notifyDataSetChanged();

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     EditText editTextSearch;
     Button buttonSearch;
     ArrayList<String> recipes = new ArrayList<>();
+    TextView textLoading;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("ENTRO A ONCLICK");
+                progressBar.setVisibility(View.VISIBLE);
+                textLoading.setVisibility(View.VISIBLE);
+                buttonSearch.setVisibility(View.INVISIBLE);
                 getRecipes(editTextSearch.getText().toString());
             }
         });
@@ -46,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                             .build();
 
         RecipeService recipeService = retrofit.create(RecipeService.class);
-        Call<ResponseAPI> call = recipeService.getRecipe(query, Credentials.APP_ID, Credentials.API_KEY);
+        Call<ResponseAPI> call = recipeService.getRecipe(query, Credentials.APP_ID, Credentials.API_KEY, 100);
 
         call.enqueue(new Callback<ResponseAPI>() {
             @Override
@@ -57,32 +63,16 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("EXITO");
                 ResponseAPI responseAPI = response.body();
                 List<Hit> hits = responseAPI.getHits();
-                //Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
-                ArrayList<String> recipesTitles = new ArrayList<>();
-                ArrayList<String> recipesImages = new ArrayList<>();
-                //ArrayList<List<String>> ingredients = new ArrayList<>();
-                for(Hit hit : hits){
-                    recipesImages.add(hit.getRecipe().getImage());
-                    //System.out.println("AÑADIENDO: " + hit.getRecipe().getLabel());
-                    recipesTitles.add(hit.getRecipe().getLabel());
-                    /**System.out.println("INGREDIENTES: ");
-                    for(String s : hit.getRecipe().getIngredientLines()){
-                        System.out.println(s);
-                    }**/
-                }
 
-                ArrayList<Hit> hitsToPass = new ArrayList<Hit>();
+                ArrayList<Hit> hitsToPass = new ArrayList<>();
                 hitsToPass.addAll(hits);
                 Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
                 Bundle args = new Bundle();
-                args.putSerializable("ARRAYLIST",(Serializable) hitsToPass);
+                args.putSerializable("ARRAYLIST", hitsToPass);
                 intent.putExtra("BUNDLE", args);
                 intent.putExtra("TEXT_SEARCH", editTextSearch.getText().toString());
                 startActivity(intent);
-                //intent.putStringArrayListExtra("ARRAY", recipesTitles);
-                //intent.putStringArrayListExtra("INGREDIENTS", recipes);
-
-                //startActivity(intent);
+                finish();
             }
 
             @Override
@@ -95,5 +85,10 @@ public class MainActivity extends AppCompatActivity {
     private void initializeComponents() {
         editTextSearch = findViewById(R.id.textViewSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
+        textLoading = findViewById(R.id.textLoading);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+        textLoading.setVisibility(View.INVISIBLE);
+        buttonSearch.setVisibility(View.VISIBLE);
     }
 }

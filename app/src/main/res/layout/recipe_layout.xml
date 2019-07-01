@@ -1,27 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
     <ImageView
         android:id="@+id/imageRecipe"
-        android:background="@color/colorPrimary"
-        android:layout_width="match_parent"
-        android:layout_height="300px" />
+        android:layout_weight="0.3"
+        android:layout_width="0px"
+        android:layout_height="match_parent" />
 
-    <TextView
-        android:padding="16px"
-        android:id="@+id/titleRecipe"
-        android:text="Titulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_weight="0.7"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/caloriesRecipe"
-        android:padding="16px"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
+        <TextView
+            android:padding="10sp"
+            android:id="@+id/titleRecipe"
+            android:text="titulo"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="24sp"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/caloriesRecipe"
+                android:padding="10sp"
+                android:textSize="16sp"
+                android:text="calorias"
+                android:textColor="@android:color/background_dark"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_weight="0.5"
+                android:layout_width="0px"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/totalIngredientsRecipe"
+                android:padding="10sp"
+                android:text="total"
+                android:textSize="16sp"
+                android:textColor="@android:color/background_dark"
+                android:fontFamily="sans-serif-condensed"
+                android:layout_weight="0.5"
+                android:layout_width="0px"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:layout_margin="8sp"
+        android:background="@color/colorPrimaryDark" />
+
+</LinearLayout>
+
