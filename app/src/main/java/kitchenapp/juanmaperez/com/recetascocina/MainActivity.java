@@ -1,6 +1,7 @@
 package kitchenapp.juanmaperez.com.recetascocina;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,17 +33,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initializeComponents();
+        ConnectivityHelper ch = new ConnectivityHelper();
 
-        buttonSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressBar.setVisibility(View.VISIBLE);
-                textLoading.setVisibility(View.VISIBLE);
-                buttonSearch.setVisibility(View.INVISIBLE);
-                getRecipes(editTextSearch.getText().toString());
-            }
-        });
+        if(!ConnectivityHelper.isConnectedToNetwork(this)){
+            System.out.println("No esta conectado");
+        }else {
+            System.out.println("Esta conectado");
+
+            initializeComponents();
+
+            buttonSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    textLoading.setVisibility(View.VISIBLE);
+                    buttonSearch.setVisibility(View.INVISIBLE);
+                    getRecipes(editTextSearch.getText().toString());
+                }
+            });
+        }
     }
 
     private void getRecipes(String query) {
