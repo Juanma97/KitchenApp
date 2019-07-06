@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kitchenapp.juanmaperez.com.recetascocina">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -19,8 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ResultsActivity"></activity>
-        <activity android:name=".RecipeDetailsActivity"></activity>
+        <activity android:name=".ResultsActivity" />
+        <activity android:name=".RecipeDetailsActivity" />
+        <activity android:name=".NoInternetActivity"></activity>
     </application>
 
 </manifest>

@@ -22,7 +22,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private Hit hit;
     private ImageView bgHeader;
     private TextView titleRecipe, timeRecipe, kcalRecipe, cautionsRecipe, ingredientsRecipe;
-    private Button buttonInstructionsRecipe;
+    private Button buttonInstructionsRecipe, shareRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         //cautionsRecipe = findViewById(R.id.cautionsRecipe);
         ingredientsRecipe = findViewById(R.id.ingredientsRecipe);
         buttonInstructionsRecipe = findViewById(R.id.instructionsRecipe);
+        shareRecipe = findViewById(R.id.shareRecipe);
 
         buttonInstructionsRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,12 +52,28 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             }
         });
 
+        shareRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent share = new Intent(android.content.Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+                // Add data to the intent, the receiving app will decide
+                // what to do with it.
+                share.putExtra(Intent.EXTRA_SUBJECT, "Receta");
+                share.putExtra(Intent.EXTRA_TEXT, hit.getRecipe().getShareAs());
+
+                startActivity(Intent.createChooser(share, "Share link!"));
+            }
+        });
+
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapse_toolbar);
         collapsingToolbarLayout.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.MyAppbar);
+        AppBarLayout appBarLayout = findViewById(R.id.MyAppbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             boolean isShow = true;
             int scrollRange = -1;
@@ -68,12 +85,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 }
                 if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.setTitle(hit.getRecipe().getLabel());
-                    //titleRecipe.setVisibility(View.INVISIBLE);
                     titleRecipe.setText("Datos e ingredientes");
                     isShow = true;
                 } else if(isShow) {
                     collapsingToolbarLayout.setTitle(" ");//careful there should a space between double quote otherwise it wont work
-                    //titleRecipe.setVisibility(View.VISIBLE);
                     titleRecipe.setText(hit.getRecipe().getLabel());
                     isShow = false;
                 }
@@ -89,7 +104,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         titleRecipe.setText(hit.getRecipe().getLabel());
         int calories = (int) Math.round(hit.getRecipe().getCalories());
         calories = calories / 10;
-        kcalRecipe.setText(String.valueOf(calories));
+        kcalRecipe.setText(String.valueOf(calories) + " KCAL ");
 
         String ingredients = "";
 

@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.sql.SQLOutput;
@@ -25,26 +27,36 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ResultsActivity extends AppCompatActivity {
 
     EditText editTextSearchResults;
+    TextView textNoResults;
     ImageButton buttonSearchResults, buttonBackResults;
     RecyclerView recyclerView;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager layoutManager;
     ArrayList<Hit> hits;
+    ProgressBar progressBarResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-
-        System.out.println("ON CREATE RESULTS ACTIVITY");
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra("BUNDLE");
         hits = (ArrayList<Hit>) args.getSerializable("ARRAYLIST");
         initializeComponents();
+        System.out.println("ON CREATE RESULTS ACTIVITY");
+        System.out.println("HITS SIZE: " + hits.size());
+
+        if(hits.size() == 0) textNoResults.setVisibility(View.VISIBLE);
+
+
         editTextSearchResults.setText(intent.getStringExtra("TEXT_SEARCH"));
     }
 
     private void initializeComponents() {
+        progressBarResults = findViewById(R.id.progressBarResults);
+        progressBarResults.setVisibility(View.INVISIBLE);
+        textNoResults = findViewById(R.id.textNoResults);
+        textNoResults.setVisibility(View.INVISIBLE);
         editTextSearchResults = findViewById(R.id.editTextSearchResults);
         buttonSearchResults = findViewById(R.id.buttonSearchResults);
         buttonBackResults = findViewById(R.id.buttonBackResults);
@@ -58,7 +70,13 @@ public class ResultsActivity extends AppCompatActivity {
         buttonSearchResults.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getRecipes(editTextSearchResults.getText().toString());
+                if(editTextSearchResults.getText().length() > 0){
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    progressBarResults.setVisibility(View.VISIBLE);
+                    getRecipes(editTextSearchResults.getText().toString());
+                }else{
+                    editTextSearchResults.setError("Introduzca un ingrediente");
+                }
             }
         });
         recyclerView = findViewById(R.id.recyclerView);
@@ -69,6 +87,7 @@ public class ResultsActivity extends AppCompatActivity {
 
         mAdapter = new RecipeAdapter(this, hits);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.requestFocus();
     }
 
     private void getRecipes(String query) {
@@ -91,15 +110,20 @@ public class ResultsActivity extends AppCompatActivity {
                 List<Hit> hitsResponse = responseAPI.getHits();
                 hits.clear();
                 hits.addAll(hitsResponse);
-                System.out.println(hits.size());
-                for(Hit h : hits){
-                    System.out.println(h.getRecipe().getLabel());
+                if(hits.size() == 0) {
+                    textNoResults.setVisibility(View.VISIBLE);
+                    progressBarResults.setVisibility(View.INVISIBLE);
+                }else{
+                    textNoResults.setVisibility(View.INVISIBLE);
                 }
                 mAdapter = new RecipeAdapter(getApplicationContext(), hits);
 
                 recyclerView.setAdapter(mAdapter);
 
                 mAdapter.notifyDataSetChanged();
+                progressBarResults.setVisibility(View.INVISIBLE);
+                recyclerView.setVisibility(View.VISIBLE);
+                recyclerView.requestFocus();
 
             }
 

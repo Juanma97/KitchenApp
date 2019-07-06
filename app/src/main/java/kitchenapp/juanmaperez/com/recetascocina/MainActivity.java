@@ -1,9 +1,15 @@
 package kitchenapp.juanmaperez.com.recetascocina;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,23 +38,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initializeComponents();
 
         ConnectivityHelper ch = new ConnectivityHelper();
 
         if(!ConnectivityHelper.isConnectedToNetwork(this)){
             System.out.println("No esta conectado");
+            startActivity(new Intent(MainActivity.this, NoInternetActivity.class));
+            finish();
         }else {
             System.out.println("Esta conectado");
-
-            initializeComponents();
 
             buttonSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    textLoading.setVisibility(View.VISIBLE);
-                    buttonSearch.setVisibility(View.INVISIBLE);
-                    getRecipes(editTextSearch.getText().toString());
+                    if(editTextSearch.getText().length() > 0) {
+                        progressBar.setVisibility(View.VISIBLE);
+                        textLoading.setVisibility(View.VISIBLE);
+                        buttonSearch.setVisibility(View.INVISIBLE);
+                        getRecipes(editTextSearch.getText().toString());
+                    }else{
+                        editTextSearch.setError("Introduzca un ingrediente");
+                    }
                 }
             });
         }

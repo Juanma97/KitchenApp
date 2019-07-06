@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +21,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     private Context mContext;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView titleRecipe, caloriesRecipe, totalIngredientsRecipe;
+        public TextView titleRecipe, caloriesRecipe, dificultyRecipe;
         public ImageView imageRecipe;
 
         public MyViewHolder(View view){
             super(view);
             titleRecipe = view.findViewById(R.id.titleRecipe);
             caloriesRecipe = view.findViewById(R.id.caloriesRecipe);
-            totalIngredientsRecipe = view.findViewById(R.id.totalIngredientsRecipe);
+            dificultyRecipe = view.findViewById(R.id.dificultyRecipe);
             imageRecipe = view.findViewById(R.id.imageRecipe);
         }
 
@@ -52,12 +51,19 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Hit hit = dataset.get(position);
         Glide.with(mContext).load(hit.getRecipe().getImage()).into(holder.imageRecipe);
+
         holder.titleRecipe.setText(hit.getRecipe().getLabel());
         int calories = (int) Math.round(hit.getRecipe().getCalories());
         calories = calories / 10;
         holder.caloriesRecipe.setText(String.valueOf(calories) + " KCAL");
         List<String> ingredients = hit.getRecipe().getIngredientLines();
-        holder.totalIngredientsRecipe.setText("Ingredientes: " + ingredients.size());
+        if(ingredients.size() > 0 && ingredients.size() < 4){
+            holder.dificultyRecipe.setText("Principiante +");
+        }else if(ingredients.size() >= 4 && ingredients.size() < 7){
+            holder.dificultyRecipe.setText("Intermedio ++");
+        }else{
+            holder.dificultyRecipe.setText("Experto +++");
+        }
 
         holder.imageRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,5 +81,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public int getItemCount() {
         return dataset.size();
     }
+
 
 }

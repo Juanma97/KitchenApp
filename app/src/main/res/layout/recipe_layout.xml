@@ -13,6 +13,7 @@
 
     <ImageView
         android:id="@+id/imageRecipe"
+        android:src="@color/colorPrimaryDark"
         android:layout_weight="0.3"
         android:layout_width="0px"
         android:layout_height="match_parent" />
@@ -50,9 +51,9 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/totalIngredientsRecipe"
+                android:id="@+id/dificultyRecipe"
                 android:padding="10sp"
-                android:text="total"
+                android:text="dificultad"
                 android:textSize="16sp"
                 android:textColor="@android:color/background_dark"
                 android:fontFamily="sans-serif-condensed"
