@@ -51,7 +51,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Hit hit = dataset.get(position);
         Glide.with(mContext).load(hit.getRecipe().getImage()).into(holder.imageRecipe);
-
         holder.titleRecipe.setText(hit.getRecipe().getLabel());
         int calories = (int) Math.round(hit.getRecipe().getCalories());
         calories = calories / 10;
@@ -66,6 +65,17 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.MyViewHold
         }
 
         holder.imageRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, RecipeDetailsActivity.class);
+                Bundle args = new Bundle();
+                args.putSerializable("HIT",(Serializable) hit);
+                intent.putExtra("BUNDLE", args);
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.titleRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, RecipeDetailsActivity.class);
