@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "120811976999",
+    "firebase_url": "https://recetas-cocina-a4845.firebaseio.com",
+    "project_id": "recetas-cocina-a4845",
+    "storage_bucket": "recetas-cocina-a4845.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120811976999:android:c0029057ee45db4d",
+        "android_client_info": {
+          "package_name": "kitchenapp.juanmaperez.com.recetascocina"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120811976999-l6sdajc8ef75h13r28gp59umd53qc3i7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAs6t-qPl3DQ5dcftRcw7DVqKHON1RvWME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120811976999-l6sdajc8ef75h13r28gp59umd53qc3i7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
