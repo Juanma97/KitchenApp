@@ -1,5 +1,6 @@
 package kitchenapp.juanmaperez.com.recetascocina;
 
+import android.content.Context;
 import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
@@ -32,12 +33,14 @@ public class MainActivity extends AppCompatActivity {
     TextView textLoading;
     ProgressBar progressBar;
     private AdView mAdView;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initializeComponents();
+        mContext = this;
 
         MobileAds.initialize(this, getString(R.string.ADMOB_APP_ID));
         mAdView = findViewById(R.id.adView);
@@ -56,7 +59,11 @@ public class MainActivity extends AppCompatActivity {
             buttonSearch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(editTextSearch.getText().length() > 0) {
+                    if(!ConnectivityHelper.isConnectedToNetwork(mContext)){
+                        startActivity(new Intent(MainActivity.this, NoInternetActivity.class));
+                        finish();
+                    }
+                    if(editTextSearch.getText().length() > 0 && !ConnectivityHelper.isConnectedToNetwork(mContext)) {
                         progressBar.setVisibility(View.VISIBLE);
                         textLoading.setVisibility(View.VISIBLE);
                         buttonSearch.setVisibility(View.INVISIBLE);
