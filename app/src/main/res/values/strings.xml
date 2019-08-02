@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Recetas Cocina</string>
     <string name="searchHint">Ingrediente</string>
-    <string name="title_search">¿Qué quieres comer hoy?</string>
+    <string name="title_search">Introduce un ingrediente</string>
     <string name="search_button">Buscar</string>
     <string name="ADMOB_APP_ID">ca-app-pub-3535087308150372~6960167663</string>
     <string name="BANNER_ID">ca-app-pub-3535087308150372/5629584756</string>

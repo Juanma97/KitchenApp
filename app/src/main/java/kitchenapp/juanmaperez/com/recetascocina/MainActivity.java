@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, NoInternetActivity.class));
                         finish();
                     }
-                    if(editTextSearch.getText().length() > 0 && !ConnectivityHelper.isConnectedToNetwork(mContext)) {
+                    if(editTextSearch.getText().length() > 0) {
                         progressBar.setVisibility(View.VISIBLE);
                         textLoading.setVisibility(View.VISIBLE);
                         buttonSearch.setVisibility(View.INVISIBLE);
